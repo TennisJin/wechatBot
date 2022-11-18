@@ -37,7 +37,12 @@ const getPrice = (name = "hf_XAU") => {
       })
       .then((res) => {
         console.log({ res: res?.data });
-        let price = res.data.split('"')[1].substring(0, 7);
+        let price = "";
+        if ((name = "hf_XAU")) {
+          price = res.data.split('"')[1].substring(0, 7);
+        } else {
+          price = res.data.split('"')[1].substring(0, 6);
+        }
         resolve(price);
       })
       .catch((e) => {
