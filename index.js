@@ -6,7 +6,7 @@ const { WechatyBuilder } = require("wechaty");
 const schedule = require("./schedule/index");
 const config = require("./config/index");
 const untils = require("./utils/index");
-const { getHJ } = require("./axios/index");
+const { getPrice } = require("./axios/index");
 
 // 延时函数，防止检测出类似机器人行为操作
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -55,8 +55,15 @@ async function onMessage(msg) {
     let sendText = content.replace("@" + self.name(), "").trim();
     if (mentionSelf) {
       console.log({ sendText });
-      if (sendText.indexOf("hj") || sendText.indexOf("黄金")) {
-        getHJ().then((res) => {
+      if (sendText.indexOf("hj") != -1 || sendText.indexOf("黄金") != -1) {
+        getPrice("hf_XAU").then((res) => {
+          room.say(res);
+        });
+      } else if (
+        sendText.indexOf("oil") != -1 ||
+        sendText.indexOf("wti") != -1
+      ) {
+        getPrice("hf_CL").then((res) => {
           room.say(res);
         });
       }

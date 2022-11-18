@@ -2,12 +2,18 @@ const axios = require("axios");
 let uaTool = require("useragent-tool");
 let randomUserAgent = uaTool.getRandomUserAgent();
 
-const hjUrl = `https://hq.sinajs.cn/etag.php?_=${Date.now()}&list=hf_XAU`;
+// const hjUrl = `https://hq.sinajs.cn/etag.php?_=${Date.now()}&list=hf_XAU`;
 
-const getHJ = () => {
+/**
+ * @description:
+ * @param {*} name hf_XAU - 黄金，hf_CL - wti
+ * @return {*}
+ */
+const getPrice = (name = "hf_XAU") => {
+  console.log({ name });
   return new Promise((resolve, reject) => {
     axios
-      .get(hjUrl, {
+      .get(`https://hq.sinajs.cn/etag.php?_=${Date.now()}&list=${name}`, {
         headers: {
           "User-Agent": randomUserAgent,
           "Cache-Control": "no-store",
@@ -35,12 +41,12 @@ const getHJ = () => {
         resolve(price);
       })
       .catch((e) => {
-        console.log({ getHjError: e });
+        console.log({ getPriceError: e });
         reject(e);
       });
   });
 };
 
 module.exports = {
-  getHJ,
+  getPrice,
 };
