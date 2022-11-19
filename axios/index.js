@@ -9,11 +9,11 @@ let randomUserAgent = uaTool.getRandomUserAgent();
  * @param {*} name hf_XAU - 黄金，hf_CL - wti
  * @return {*}
  */
-const getPrice = (name = "hf_XAU") => {
+const getPrice = (name = "hf_XAU", date = Date.now()) => {
   console.log({ name });
   return new Promise((resolve, reject) => {
     axios
-      .get(`https://hq.sinajs.cn/etag.php?_=${Date.now()}&list=${name}`, {
+      .get(`https://hq.sinajs.cn/etag.php?_=${date}&list=${name}`, {
         headers: {
           "User-Agent": randomUserAgent,
           "Cache-Control": "no-store",
