@@ -99,16 +99,16 @@ bot
 
 const workDayRemind = (bot) => {
   // 测试时间;
-  // schedule.scheduleJob("00 * 9-22 * * 1-7", function () {
-  // getPrice("hf_XAU").then(async (res) => {
-  //   let contact = await bot.Contact.find({ name: "吐丝" });
-  //   chatInRoom(bot, rooms.ceshi, res, contact);
-  // });
-  // getPrice("hf_CL").then(async (res) => {
-  //   let contact = await bot.Contact.find({ name: "百万目标还差一百二十万" });
-  //   chatInRoom(bot, rooms.wajue, res, contact);
-  // });
-  // });
+  schedule.scheduleJob("00 * 9-22 * * 1-7", function () {
+    // getPrice("hf_XAU").then(async (res) => {
+    //   let contact = await bot.Contact.find({ name: "吐丝" });
+    //   chatInRoom(bot, rooms.ceshi, res, contact);
+    // });
+    // getPrice("hf_CL").then(async (res) => {
+    //   let contact = await bot.Contact.find({ name: "百万目标还差一百二十万" });
+    //   chatInRoom(bot, rooms.wajue, res, contact);
+    // });
+  });
 
   /**
     *    *    *    *    *    *
@@ -125,7 +125,7 @@ const workDayRemind = (bot) => {
   schedule.scheduleJob("00 58 8-22 * * 1-5", function () {
     getPrice("hf_XAU", 1668775141).then(async (res) => {
       let contact = await bot.Contact.find({ name: "吐丝" });
-      chatInRoom(bot, rooms.wajue, res, contact);
+      chatInRoom(bot, rooms.ceshi, res, contact);
     });
     getPrice("hf_CL").then(async (res) => {
       let contact = await bot.Contact.find({ name: "百万目标还差一百二十万" });
