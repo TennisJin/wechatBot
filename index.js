@@ -121,11 +121,11 @@ const workDayRemind = (bot) => {
     │    └──────────────────── minute (0 - 59)
     └───────────────────────── second (0 - 59, OPTIONAL)
    */
-  // 工作日9点到22点58分提示价格
-  schedule.scheduleJob("00 58 9-22 * * 1-5", function () {
+  // 工作日8点到22点58分提示价格
+  schedule.scheduleJob("00 58 8-22 * * 1-5", function () {
     getPrice("hf_XAU", 1668775141).then(async (res) => {
       let contact = await bot.Contact.find({ name: "吐丝" });
-      chatInRoom(bot, rooms.ceshi, res, contact);
+      chatInRoom(bot, rooms.wajue, res, contact);
     });
     getPrice("hf_CL").then(async (res) => {
       let contact = await bot.Contact.find({ name: "百万目标还差一百二十万" });
