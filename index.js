@@ -54,8 +54,11 @@ async function onMessage(msg) {
     console.log(`群名: ${topic} 发消息人: ${contact.name()} 内容: ${content}`);
     const mentionSelf = await msg.mentionSelf();
     let self = await msg.to();
-    // 获取消息内容，拿到整个消息文本，去掉 @+名字
-    let sendText = content.replace("@" + self.name(), "").trim();
+    // 获取消息内容，拿到整个消息文本，去掉 @+名字并转为小写
+    let sendText = content
+      .replace("@" + self.name(), "")
+      .trim()
+      .toLowerCase();
     if (mentionSelf) {
       if (
         sendText.indexOf("hj") != -1 ||
@@ -99,16 +102,16 @@ bot
 
 const workDayRemind = (bot) => {
   // 测试时间;
-  schedule.scheduleJob("00 * 9-22 * * 1-7", function () {
-    // getPrice("hf_XAU").then(async (res) => {
-    //   let contact = await bot.Contact.find({ name: "吐丝" });
-    //   chatInRoom(bot, rooms.ceshi, res, contact);
-    // });
-    // getPrice("hf_CL").then(async (res) => {
-    //   let contact = await bot.Contact.find({ name: "百万目标还差一百二十万" });
-    //   chatInRoom(bot, rooms.wajue, res, contact);
-    // });
-  });
+  // schedule.scheduleJob("00 * 9-22 * * 1-7", function () {
+  // getPrice("hf_XAU").then(async (res) => {
+  //   let contact = await bot.Contact.find({ name: "吐丝" });
+  //   chatInRoom(bot, rooms.ceshi, res, contact);
+  // });
+  // getPrice("hf_CL").then(async (res) => {
+  //   let contact = await bot.Contact.find({ name: "百万目标还差一百二十万" });
+  //   chatInRoom(bot, rooms.wajue, res, contact);
+  // });
+  // });
 
   /**
     *    *    *    *    *    *
@@ -122,7 +125,7 @@ const workDayRemind = (bot) => {
     └───────────────────────── second (0 - 59, OPTIONAL)
    */
   // 工作日8点到22点58分提示价格
-  schedule.scheduleJob("00 58 8-22 * * 1-5", function () {
+  schedule.scheduleJob("00 58 8-21 * * 1-5", function () {
     getPrice("hf_XAU", 1668775141).then(async (res) => {
       let contact = await bot.Contact.find({ name: "吐丝" });
       chatInRoom(bot, rooms.ceshi, res, contact);
