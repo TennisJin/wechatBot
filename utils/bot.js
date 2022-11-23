@@ -43,9 +43,9 @@ const mentionMessage = async (message) => {
 
 /**
  * @description: 查找某个人私聊
- * @param {*} bot
- * @param {*} name
- * @param {*} message
+ * @param {*} bot 机器人
+ * @param {*} name 聊天室名字
+ * @param {*} message 聊天消息
  * @return {*}
  */
 const findOne = async (bot, name = "吐丝", message = "你在干嘛") => {
@@ -57,9 +57,10 @@ const findOne = async (bot, name = "吐丝", message = "你在干嘛") => {
 
 /**
  * @description: 群内聊
- * @param {*} bot
- * @param {*} 聊天室名字
- * @param {*} message
+ * @param {*} bot 机器人
+ * @param {*} name 聊天室名字
+ * @param {*} message 聊天消息
+ * @param {*} metionContact 提醒人员
  * @return {*}
  */
 const chatInRoom = async (
