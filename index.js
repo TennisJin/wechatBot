@@ -59,7 +59,7 @@ async function onMessage(msg) {
       .replace("@" + self.name(), "")
       .trim()
       .toLowerCase();
-    if (mentionSelf || topic == "挖掘机") {
+    if (mentionSelf || topic == rooms.wajue) {
       if (
         sendText.indexOf("hj") != -1 ||
         sendText.indexOf("黄金") != -1 ||
