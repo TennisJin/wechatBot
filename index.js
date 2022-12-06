@@ -70,7 +70,8 @@ async function onMessage(msg) {
         });
       } else if (
         sendText.indexOf("oil") != -1 ||
-        sendText.indexOf("wti") != -1
+        sendText.indexOf("wti") != -1 ||
+        sendText.indexOf("油") != -1
       ) {
         getPrice("hf_CL").then((res) => {
           room.say(res);
