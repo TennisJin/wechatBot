@@ -61,17 +61,17 @@ async function onMessage(msg) {
       .toLowerCase();
     if (mentionSelf || topic == rooms.wajue) {
       if (
-        sendText.startWith("hj") != -1 ||
-        sendText.startWith("黄金") != -1 ||
-        sendText.startWith("gold") != -1
+        sendText.startsWith("hj") != -1 ||
+        sendText.startsWith("黄金") != -1 ||
+        sendText.startsWith("gold") != -1
       ) {
         getPrice("hf_XAU").then((res) => {
           room.say(res);
         });
       } else if (
-        sendText.startWith("oil") != -1 ||
-        sendText.startWith("wti") != -1 ||
-        sendText.startWith("油") != -1
+        sendText.startsWith("oil") != -1 ||
+        sendText.startsWith("wti") != -1 ||
+        sendText.startsWith("油") != -1
       ) {
         getPrice("hf_CL").then((res) => {
           room.say(res);
