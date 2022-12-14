@@ -55,10 +55,11 @@ async function onMessage(msg) {
     const mentionSelf = await msg.mentionSelf();
     let self = await msg.to();
     // 获取消息内容，拿到整个消息文本，去掉 @+名字并转为小写
-    let sendText = content
-      .replace("@" + self.name(), "")
-      .trim()
-      .toLowerCase();
+    let sendText =
+      content
+        .replace("@" + self.name(), "")
+        .trim()
+        .toLowerCase() || "";
     if (mentionSelf || topic == rooms.wajue) {
       if (
         sendText.startsWith("hj") ||
