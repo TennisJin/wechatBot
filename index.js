@@ -90,6 +90,7 @@ async function onMessage(msg) {
         findOne(bot, alias, res.data.choices[0].text);
       })
       .catch((e) => {
+        console.log({ e });
         findOne(bot, alias, "哦豁，出错了");
       });
   }
