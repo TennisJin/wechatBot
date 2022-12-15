@@ -85,9 +85,13 @@ async function onMessage(msg) {
     console.log(`发消息人: ${alias} 消息内容: ${content}`);
     // 获取消息内容，拿到整个消息文本，去掉 @+名字并转为小写
     let sendText = content.trim().toLowerCase() || "";
-    completion(sendText).then((res) => {
-      findOne(bot, alias, res.data.choices[0].text);
-    });
+    completion(sendText)
+      .then((res) => {
+        findOne(bot, alias, res.data.choices[0].text);
+      })
+      .catch((e) => {
+        findOne(bot, alias, "哦豁，出错了");
+      });
   }
 }
 
