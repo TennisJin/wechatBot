@@ -10,4 +10,7 @@ module.exports = {
     ljq: "@210cdf0cdef0ccfd83910bc620517bbe",
     jc: "@3bf8551848bb5ee35a018e2738e236af",
   },
+  openaikey: {
+    tusi: "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",
+  },
 };

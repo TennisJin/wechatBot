@@ -6,7 +6,8 @@ const { WechatyBuilder, log } = require("wechaty");
 const schedule = require("node-schedule");
 const { getPrice } = require("./axios/index");
 const { chatInRoom, findOne, showAllList } = require("./utils/bot");
-const { rooms, people } = require("./config");
+const { rooms } = require("./config");
+const completion = require("./utils/openai");
 
 // 二维码生成
 function onScan(qrcode, status) {
@@ -82,6 +83,11 @@ async function onMessage(msg) {
   } else if (isText) {
     // 如果非群消息 目前只处理文字消息
     console.log(`发消息人: ${alias} 消息内容: ${content}`);
+    // 获取消息内容，拿到整个消息文本，去掉 @+名字并转为小写
+    let sendText = content.trim().toLowerCase() || "";
+    completion(sendText).then((res) => {
+      findOne(bot, alias, res.data.choices[0].text);
+    });
   }
 }
 
