@@ -1,6 +1,9 @@
-const { openaikey } = require("../config");
 const { Configuration, OpenAIApi } = require("openai");
-
+console.log({ apiKey: process.env });
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
 /**
  * @description: 获取openai对话结果
  * @param {*} prompt 关键字
@@ -15,12 +18,6 @@ const completion = (
   temperature = 0.5,
   model = "text-davinci-003"
 ) => {
-  const randomKey = Object.values(openaikey)[Math.floor(Math.random() * 10)];
-  console.log(randomKey);
-  const configuration = new Configuration({
-    apiKey: randomKey,
-  });
-  const openai = new OpenAIApi(configuration);
   return openai.createCompletion(
     {
       model: model,
