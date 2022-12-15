@@ -96,15 +96,11 @@ async function onMessage(botInstance, msg) {
     let sendText = content.trim().toLowerCase() || "";
     completion(sendText)
       .then((res) => {
-        botInstance.findOne(
-          botInstance.bot,
-          contact.name(),
-          res.data.choices[0].text
-        );
+        botInstance.findOne(contact.name(), res.data.choices[0].text.trim());
       })
       .catch((e) => {
         console.log({ e });
-        botInstance.findOne(botInstance.bot, contact.name(), "哦豁，出错了");
+        botInstance.findOne(contact.name(), "哦豁，出错了");
       });
   }
 }
