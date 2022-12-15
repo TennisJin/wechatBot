@@ -11,6 +11,6 @@ module.exports = {
     jc: "@3bf8551848bb5ee35a018e2738e236af",
   },
   openaikey: {
-    tusi: "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",
+    tusi: "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",
   },
 };
