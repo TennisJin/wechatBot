@@ -4,9 +4,17 @@ class MyBot {
   loginHook;
   messageHook;
   bot;
+  config;
   constructor(loginHook, messageHook) {
     this.loginHook = loginHook;
     this.messageHook = messageHook;
+    this.config = {
+      room: {
+        openedRoom: [],
+        startOpenAiKeyWord: "开启openai",
+        closeOpenAiKeyWord: "关闭openai",
+      },
+    };
     this.init();
   }
 
@@ -73,19 +81,27 @@ class MyBot {
 
   async findOne(name = "吐丝", message = "你在干嘛") {
     // find by name:
-    const filehelper = await this.bot.Contact.find(name);
-    filehelper.say(message);
+    try {
+      const filehelper = await this.bot.Contact.find(name);
+      filehelper.say(message);
+    } catch (e) {
+      console.log({ e });
+    }
   }
   async showAllList() {
-    const contactList = await this.bot.Contact.findAll();
-    console.info("Total number of contacts:", contactList.length);
+    try {
+      const contactList = await this.bot.Contact.findAll();
+      console.info("Total number of contacts:", contactList.length);
 
-    for (const contact of contactList) {
-      console.info("Id:", contact.id);
-      console.info("Name:", contact.name());
+      for (const contact of contactList) {
+        console.info("Id:", contact.id);
+        console.info("Name:", contact.name());
 
-      const type = contact.type();
-      // console.info("Type:", Contact.Type[type]);
+        const type = contact.type();
+        // console.info("Type:", Contact.Type[type]);
+      }
+    } catch (e) {
+      console.log({ e });
     }
   }
 }

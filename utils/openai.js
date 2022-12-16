@@ -14,7 +14,7 @@ const openai = new OpenAIApi(configuration);
  */
 const completion = (
   prompt = "hello",
-  max_tokens = 255,
+  max_tokens = 512,
   temperature = 0.5,
   model = "text-davinci-003"
 ) => {
