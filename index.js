@@ -65,7 +65,6 @@ async function onMessage(botInstance, msg) {
       console.log(
         `群名: ${topic} 发消息人: ${contact.name()} 内容: ${content}`
       );
-      const mentionSelf = await msg.mentionSelf();
       let self = await msg.to();
       // 获取消息内容，拿到整个消息文本，去掉 @+名字并转为小写
       let sendText =
@@ -73,6 +72,9 @@ async function onMessage(botInstance, msg) {
           .replace("@" + self.name(), "")
           .trim()
           .toLowerCase() || "";
+      // 使用await判断太慢，改为文字判断
+      // const mentionSelf = await msg.mentionSelf();
+      const mentionSelf = content.indexOf("@" + self.name()) !== -1;
       // 外汇逻辑
       if (topic == rooms.wajue) {
         if (
@@ -95,18 +97,15 @@ async function onMessage(botInstance, msg) {
       }
       // openai逻辑
       if (mentionSelf) {
-        console.log(botInstance.config.room.openedRoom);
         // 群聊开启
         if (sendText == botInstance.config.room.startOpenAiKeyWord) {
           botInstance.config.room.openedRoom.includes(topic) ||
             botInstance.config.room.openedRoom.push(topic);
-          console.log(botInstance.config.room.openedRoom);
           room.say("开启成功");
         } else if (sendText == botInstance.config.room.closeOpenAiKeyWord) {
           // 群聊关闭
           botInstance.config.room.openedRoom =
             botInstance.config.room.openedRoom.filter((item) => item !== topic);
-          console.log(botInstance.config.room.openedRoom);
           room.say("关闭成功");
         } else {
           // 已开启
