@@ -26,7 +26,7 @@ const completion = (
       temperature: temperature,
     },
     {
-      timeout: 10000,
+      timeout: 60 * 1000,
     }
   );
 };
