@@ -34,15 +34,15 @@ const workDayRemind = (botInstance) => {
    */
   // 工作日8点到22点58分提示价格
   schedule.scheduleJob("00 58 8-21 * * 1-5", function () {
-    getPrice("hf_XAU", 1668775141).then(async (res) => {
+    getPrice("hf_XAU").then(async (res) => {
       let contact = await botInstance.bot.Contact.find({ name: "吐丝" });
-      botInstance.chatInRoom(botInstance.bot, rooms.ceshi, res, contact);
+      botInstance.chatInRoom(rooms.ceshi, res, contact);
     });
     getPrice("hf_CL").then(async (res) => {
       let contact = await botInstance.bot.Contact.find({
         name: "百万目标还差一百二十万",
       });
-      botInstance.chatInRoom(botInstance.bot, rooms.wajue, res, contact);
+      botInstance.chatInRoom(rooms.wajue, res, contact);
     });
   });
 };
@@ -66,12 +66,15 @@ async function onMessage(botInstance, msg) {
         `群名: ${topic} 发消息人: ${contact.name()} 内容: ${content}`
       );
       let self = await msg.to();
+      // console.log({ self });
+      // console.log({ selfName: self.name() });
       // 获取消息内容，拿到整个消息文本，去掉 @+名字并转为小写
       let sendText =
         content
           .replace("@" + self.name(), "")
           .trim()
           .toLowerCase() || "";
+      // console.log({ sendText });
       // 使用await判断太慢，改为文字判断
       // const mentionSelf = await msg.mentionSelf();
       const mentionSelf = content.indexOf("@" + self.name()) !== -1;

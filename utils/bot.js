@@ -72,8 +72,10 @@ class MyBot {
 
   async chatInRoom(name = "测试群聊", message = "hello", metionContact = {}) {
     try {
+      console.log(name, message, metionContact);
       const room = await this.bot.Room.find({ topic: name });
-      room.say(message, metionContact);
+      // room.say(message, metionContact);
+      room.say(message);
     } catch (e) {
       console.log({ e });
     }
