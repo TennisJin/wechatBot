@@ -13,6 +13,7 @@ async function initChatGpt() {
  * @return {*}
  */
 async function conversation(chatApi, message, conversationId, id) {
+  console.log({ chatApi });
   return chatApi.sendMessage(message, {
     conversationId: conversationId,
     parentMessageId: id,

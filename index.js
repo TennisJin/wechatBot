@@ -145,6 +145,7 @@ async function onMessage(botInstance, msg) {
       console.log(`发消息人: ${contact.name()} 消息内容: ${content}`);
       // 获取消息内容，拿到整个消息文本，去掉 @+名字并转为小写
       let sendText = content.trim().toLowerCase() || "";
+      console.log({ chatApi });
       conversation(
         chatApi,
         sendText,
@@ -177,5 +178,6 @@ let myBot = new MyBot(workDayRemind, onMessage);
 myBot.startBot();
 
 initChatGpt().then((res) => {
+  console.log({ res });
   chatApi = res;
 });
