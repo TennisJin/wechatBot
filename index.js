@@ -8,7 +8,7 @@ const { MyBot } = require("./utils/bot");
 const { rooms } = require("./config");
 const completion = require("./utils/openai");
 const { initChatGpt, conversation } = require("./utils/chatgpt");
-initChatGpt();
+let chatApi;
 
 const workDayRemind = (botInstance) => {
   // 测试时间;
@@ -117,6 +117,7 @@ async function onMessage(botInstance, msg) {
           if (botInstance.config.room.openedRoom.includes(topic)) {
             // 通过conversationuuid记录当前所有人的对话id，完成连续对话功能
             conversation(
+              chatApi,
               sendText,
               botInstance.conversationuuid[topic + contact.name()]
                 ?.conversationid,
@@ -145,6 +146,7 @@ async function onMessage(botInstance, msg) {
       // 获取消息内容，拿到整个消息文本，去掉 @+名字并转为小写
       let sendText = content.trim().toLowerCase() || "";
       conversation(
+        chatApi,
         sendText,
         botInstance.conversationuuid["alone" + contact.name()]?.conversationid,
         botInstance.conversationuuid["alone" + contact.name()]?.id
@@ -173,3 +175,7 @@ async function onMessage(botInstance, msg) {
  */
 let myBot = new MyBot(workDayRemind, onMessage);
 myBot.startBot();
+
+initChatGpt().then((res) => {
+  chatApi = res;
+});

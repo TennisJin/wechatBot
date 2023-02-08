@@ -1,13 +1,19 @@
-let api;
-
 async function initChatGpt() {
   const { ChatGPTAPI } = await import("chatgpt");
 
-  api = new ChatGPTAPI({ apiKey: process.env.OPENAI_API_KEY });
+  return new ChatGPTAPI({ apiKey: process.env.OPENAI_API_KEY });
 }
 
-async function conversation(message, conversationId, id) {
-  return api.sendMessage(message, {
+/**
+ * @description:
+ * @param {*} chatApi chatApi实例
+ * @param {*} message 消息
+ * @param {*} conversationId 对话id
+ * @param {*} id 上一次对话id
+ * @return {*}
+ */
+async function conversation(chatApi, message, conversationId, id) {
+  return chatApi.sendMessage(message, {
     conversationId: conversationId,
     parentMessageId: id,
   });
