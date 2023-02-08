@@ -8,6 +8,12 @@ class MyBot {
   constructor(loginHook, messageHook) {
     this.loginHook = loginHook;
     this.messageHook = messageHook;
+    this.conversationuuid = {
+      example: {
+        conversationid: "",
+        id: "",
+      },
+    };
     this.config = {
       room: {
         openedRoom: [],

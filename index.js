@@ -7,6 +7,8 @@ const { getPrice } = require("./axios/index");
 const { MyBot } = require("./utils/bot");
 const { rooms } = require("./config");
 const completion = require("./utils/openai");
+const { initChatGpt, conversation } = require("./utils/chatgpt");
+initChatGpt();
 
 const workDayRemind = (botInstance) => {
   // 测试时间;
@@ -113,9 +115,22 @@ async function onMessage(botInstance, msg) {
         } else {
           // 已开启
           if (botInstance.config.room.openedRoom.includes(topic)) {
-            completion(sendText)
+            // 通过conversationuuid记录当前所有人的对话id，完成连续对话功能
+            conversation(
+              sendText,
+              botInstance.conversationuuid[topic + contact.name()]
+                ?.conversationid,
+              botInstance.conversationuuid[topic + contact.name()]?.id
+            )
               .then((res) => {
-                room.say(res.data.choices[0].text.trim());
+                // room.say(res.data.choices[0].text.trim());
+                let { conversationId, id } = res;
+                botInstance.conversationuuid[topic + contact.name()] = {};
+                botInstance.conversationuuid[
+                  topic + contact.name()
+                ].conversationId = conversationId;
+                botInstance.conversationuuid[topic + contact.name()].id = id;
+                room.say(res.text.trim());
               })
               .catch((e) => {
                 console.log({ e });
@@ -129,9 +144,20 @@ async function onMessage(botInstance, msg) {
       console.log(`发消息人: ${contact.name()} 消息内容: ${content}`);
       // 获取消息内容，拿到整个消息文本，去掉 @+名字并转为小写
       let sendText = content.trim().toLowerCase() || "";
-      completion(sendText)
+      conversation(
+        sendText,
+        botInstance.conversationuuid["alone" + contact.name()]?.conversationid,
+        botInstance.conversationuuid["alone" + contact.name()]?.id
+      )
         .then((res) => {
-          botInstance.findOne(contact.name(), res.data.choices[0].text.trim());
+          // room.say(res.data.choices[0].text.trim());
+          let { conversationId, id } = res;
+          botInstance.conversationuuid["alone" + contact.name()] = {};
+          botInstance.conversationuuid[
+            "alone" + contact.name()
+          ].conversationId = conversationId;
+          botInstance.conversationuuid["alone" + contact.name()].id = id;
+          botInstance.findOne(contact.name(), res.text.trim());
         })
         .catch((e) => {
           console.log({ e });
