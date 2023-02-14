@@ -164,7 +164,7 @@ async function onMessage(botInstance, msg) {
         })
         .catch((e) => {
           console.log({ e });
-          botInstance.findOne(contact.name(), "哦豁，出错了");
+          botInstance.findOne(contact.name(), "哦豁，没听清楚，请再说一次");
         });
     }
   }
