@@ -1,4 +1,5 @@
-const { WechatyBuilder } = require("wechaty");
+import { WechatyBuilder } from "wechaty";
+import qrcodeEerminal from "qrcode-terminal";
 
 class MyBot {
   loginHook;
@@ -47,7 +48,7 @@ class MyBot {
 
   // 二维码生成
   onScan(qrcode, status) {
-    require("qrcode-terminal").generate(qrcode); // 在console端显示二维码
+    qrcodeEerminal.generate(qrcode); // 在console端显示二维码
     const qrcodeImageUrl = [
       "https://api.qrserver.com/v1/create-qr-code/?data=",
       encodeURIComponent(qrcode),
@@ -114,9 +115,7 @@ class MyBot {
   }
 }
 
-module.exports = {
-  MyBot,
-};
+export { MyBot };
 
 // // 二维码生成
 // function onScan(qrcode, status) {

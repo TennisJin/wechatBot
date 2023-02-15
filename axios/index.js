@@ -1,5 +1,5 @@
-const axios = require("axios");
-let uaTool = require("useragent-tool");
+import axios from "axios";
+import uaTool from "useragent-tool";
 let randomUserAgent = uaTool.getRandomUserAgent();
 
 // const hjUrl = `https://hq.sinajs.cn/etag.php?_=${Date.now()}&list=hf_XAU`;
@@ -52,6 +52,4 @@ const getPrice = (name = "hf_XAU", date = Date.now()) => {
   });
 };
 
-module.exports = {
-  getPrice,
-};
+export { getPrice };

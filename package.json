@@ -6,6 +6,7 @@
     "start": "node index.js",
     "puppet-install": "node node_modules/.bin/wechaty-puppet-install"
   },
+  "type": "module",
   "keywords": [
     "微信每日说",
     "wechaty",
