@@ -139,6 +139,8 @@ async function onMessage(botInstance, msg) {
         }
       }
     } else {
+      // 由于chatgpt限制，去除私聊
+      return;
       // 如果非群消息 目前只处理文字消息
       console.log(`发消息人: ${contact.name()} 消息内容: ${content}`);
       // 获取消息内容，拿到整个消息文本，去掉 @+名字并转为小写
