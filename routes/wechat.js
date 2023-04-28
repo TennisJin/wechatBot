@@ -10,8 +10,9 @@ router.get("/hello", function (req, res, next) {
 });
 
 router.post("/report", (req, res) => {
-  if (req.query.error) {
-    wechatBot.findOne("吐丝", req.query.error);
+  res.send("收到!");
+  if (req.body.error) {
+    wechatBot.findOne("吐丝", req.body.error);
   }
 });
 
