@@ -112,7 +112,7 @@ async function onMessage(botInstance, msg) {
       // const mentionSelf = await msg.mentionSelf();
       const mentionSelf = content.indexOf("@" + self.name()) !== -1;
       // 外汇逻辑
-      if (room.id == rooms.wajueId) {
+      if (topic == rooms.wajue) {
         if (
           sendText.startsWith("hj") ||
           sendText.startsWith("黄金") ||
