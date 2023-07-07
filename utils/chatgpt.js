@@ -19,4 +19,7 @@ async function conversation(chatApi, message, conversationId, id) {
     parentMessageId: id,
   });
 }
+// initChatGpt().then((chatApi) => {
+//   conversation(chatApi, "hello");
+// });
 module.exports = { initChatGpt, conversation };

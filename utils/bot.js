@@ -61,9 +61,11 @@ class MyBot {
     const date = new Date();
     console.log(`当前容器时间:${date}`);
 
+    // this.showAllList();
+
     setTimeout(async () => {
-      let contact = await this.bot.Contact.find({ name: "吐丝" });
-      console.log({ contact });
+      // let contact = await this.bot.Contact.find({ name: "吐丝" });
+      // console.log({ contact });
       this.loginHook(this);
     }, 2000);
   }
@@ -80,8 +82,8 @@ class MyBot {
     try {
       console.log(name, message, metionContact);
       const room = await this.bot.Room.find({ topic: name });
-      // room.say(message, metionContact);
-      room.say(message);
+      room.say(message, metionContact);
+      // room.say(message);
     } catch (e) {
       console.log({ e });
     }
@@ -96,7 +98,13 @@ class MyBot {
       console.log({ e });
     }
   }
+
+  /**
+   * @description: 显示所有联系人信息
+   * @return {*}
+   */
   async showAllList() {
+    console.log("showAllList");
     try {
       const contactList = await this.bot.Contact.findAll();
       console.info("Total number of contacts:", contactList.length);
@@ -105,7 +113,7 @@ class MyBot {
         console.info("Id:", contact.id);
         console.info("Name:", contact.name());
 
-        const type = contact.type();
+        // const type = contact.type();
         // console.info("Type:", Contact.Type[type]);
       }
     } catch (e) {

@@ -5,7 +5,7 @@
 const schedule = require("node-schedule");
 const { getPrice } = require("./index");
 const { MyBot } = require("./bot");
-const { rooms } = require("../config");
+const { rooms, people } = require("../config");
 const completion = require("./openai");
 const { initChatGpt, conversation } = require("./chatgpt");
 let chatApi;
@@ -37,16 +37,34 @@ const workDayRemind = (botInstance) => {
   // 工作日8点到22点58分提示价格
   schedule.scheduleJob("00 58 8-21 * * 1-5", function () {
     getPrice("hf_XAU").then(async (res) => {
-      let contact = await botInstance.bot.Contact.find({ name: "吐丝" });
-      botInstance.chatInRoom(rooms.ceshi, res, contact);
+      let contact = await botInstance.bot.Contact.find({
+        name: "吐丝",
+      });
+      botInstance.chatInRoom(rooms.wajue, res, contact);
     });
     getPrice("hf_CL").then(async (res) => {
       let contact = await botInstance.bot.Contact.find({
-        name: "百万目标还差一百二十万",
+        name: "李嘉琪",
       });
       botInstance.chatInRoom(rooms.wajue, res, contact);
     });
   });
+
+  // 测试
+  // setTimeout(() => {
+  //   getPrice("hf_XAU").then(async (res) => {
+  //     let contact = await botInstance.bot.Contact.find({
+  //       name: "吐丝",
+  //     });
+  //     botInstance.chatInRoom(rooms.wajue, res, contact);
+  //   });
+  //   getPrice("hf_CL").then(async (res) => {
+  //     let contact = await botInstance.bot.Contact.find({
+  //       name: "李嘉琪",
+  //     });
+  //     botInstance.chatInRoom(rooms.wajue, res, contact);
+  //   });
+  // }, 1000);
 };
 
 // 监听对话
@@ -56,12 +74,25 @@ async function onMessage(botInstance, msg) {
   const room = msg.room(); // 是否是群消息
   const alias = (await contact.alias()) || (await contact.name()); // 发消息人备注
   const isText = msg.type() === botInstance.bot.Message.Type.Text;
+
   if (msg.self()) {
     return;
   }
 
   if (isText) {
+    const text = msg.text();
+    console.log(contact, text);
+    // if (text === "创建群聊") {
+    //   // let contactTusi = await botInstance.bot.Contact.find({ name: "吐丝" });
+    //   let contactA = await botInstance.bot.Contact.find({ name: "李嘉琪" });
+    //   let contactB = await botInstance.bot.Contact.find({ name: "Robd" });
+    //   const contactList = [contactB, contactA];
+    //   const newRoom = await botInstance.bot.Room.create(contactList, "aaa");
+    //   // await newRoom.add(contact);
+    //   await newRoom.say("欢迎加入新群聊！");
+    // }
     if (room) {
+      console.log({ room });
       // 如果是群消息
       const topic = await room.topic();
       console.log(
@@ -81,7 +112,7 @@ async function onMessage(botInstance, msg) {
       // const mentionSelf = await msg.mentionSelf();
       const mentionSelf = content.indexOf("@" + self.name()) !== -1;
       // 外汇逻辑
-      if (topic == rooms.wajue) {
+      if (room.id == rooms.wajueId) {
         if (
           sendText.startsWith("hj") ||
           sendText.startsWith("黄金") ||
@@ -98,6 +129,13 @@ async function onMessage(botInstance, msg) {
           getPrice("hf_CL").then((res) => {
             room.say(res);
           });
+        }
+      }
+      // 测试群聊
+      if (room.id == rooms.ceshiId) {
+        if (sendText == "加群") {
+          let person = await botInstance.bot.Contact.find({ name: "李嘉琪" });
+          await room.add(person);
         }
       }
       // openai逻辑
