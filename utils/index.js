@@ -42,6 +42,7 @@ const getPrice = (name = "hf_XAU", date = Date.now()) => {
           price = res.data.split('"')[1].substring(0, 7);
         } else {
           price = res.data.split('"')[1].substring(0, 6);
+          price = price * 1 - 0.55; // 修正新浪数据
         }
         resolve(price);
       })
