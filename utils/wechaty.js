@@ -5,7 +5,7 @@
 const schedule = require("node-schedule");
 const { getPrice, fetchStock } = require("./index");
 const { MyBot } = require("./bot");
-const { rooms, people } = require("../config");
+const { rooms, people, keyWords } = require("../config");
 const completion = require("./openai");
 const { initChatGpt, conversation } = require("./chatgpt");
 let chatApi;
@@ -112,39 +112,51 @@ async function onMessage(botInstance, msg) {
       const mentionSelf = content.indexOf("@" + self.name()) !== -1;
       // 外汇逻辑
       if (topic == rooms.wajue) {
-        if (
-          sendText.startsWith("hj") ||
-          sendText.startsWith("黄金") ||
-          sendText.startsWith("gold")
-        ) {
-          getPrice("hf_XAU").then((res) => {
-            room.say(res);
-          });
-        } else if (
-          sendText.startsWith("oil") ||
-          sendText.startsWith("wti") ||
-          sendText.startsWith("油")
-        ) {
-          getPrice("hf_CL").then((res) => {
-            room.say(res);
-          });
-        } else if (
-          sendText.startsWith("京东") ||
-          sendText.startsWith("狗东") ||
-          sendText.startsWith("jd")
-        ) {
-          fetchStock("JD").then((res) => {
-            room.say(res);
-          });
-        } else if (
-          sendText.startsWith("nvda") ||
-          sendText.startsWith("nvd") ||
-          sendText.startsWith("英伟达")
-        ) {
-          fetchStock("NVDA").then((res) => {
-            room.say(res);
-          });
+        if (Object.keys(keyWords).includes(sendText)) {
+          const code = keyWords[sendText];
+          if (["hf_XAU", "hf_CL"].includes(code)) {
+            getPrice(code).then((res) => {
+              room.say(res);
+            });
+          } else if (["JD", "NVDA", "TSLA"].includes(code)) {
+            fetchStock(code).then((res) => {
+              room.say(res);
+            });
+          }
         }
+        // if (
+        //   sendText.startsWith("hj") ||
+        //   sendText.startsWith("黄金") ||
+        //   sendText.startsWith("gold")
+        // ) {
+        //   getPrice("hf_XAU").then((res) => {
+        //     room.say(res);
+        //   });
+        // } else if (
+        //   sendText.startsWith("oil") ||
+        //   sendText.startsWith("wti") ||
+        //   sendText.startsWith("油")
+        // ) {
+        //   getPrice("hf_CL").then((res) => {
+        //     room.say(res);
+        //   });
+        // } else if (
+        //   sendText.startsWith("京东") ||
+        //   sendText.startsWith("狗东") ||
+        //   sendText.startsWith("jd")
+        // ) {
+        //   fetchStock("JD").then((res) => {
+        //     room.say(res);
+        //   });
+        // } else if (
+        //   sendText.startsWith("nvda") ||
+        //   sendText.startsWith("nvd") ||
+        //   sendText.startsWith("英伟达")
+        // ) {
+        //   fetchStock("NVDA").then((res) => {
+        //     room.say(res);
+        //   });
+        // }
       }
       // 测试群聊
       if (room.id == rooms.ceshiId) {
