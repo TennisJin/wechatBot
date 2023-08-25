@@ -3,7 +3,7 @@
  *  - https://github.com/gengchen528/wechatBot
  */
 const schedule = require("node-schedule");
-const { getPrice } = require("./index");
+const { getPrice, fetchStock } = require("./index");
 const { MyBot } = require("./bot");
 const { rooms, people } = require("../config");
 const completion = require("./openai");
@@ -127,6 +127,22 @@ async function onMessage(botInstance, msg) {
           sendText.startsWith("油")
         ) {
           getPrice("hf_CL").then((res) => {
+            room.say(res);
+          });
+        } else if (
+          sendText.startsWith("京东") ||
+          sendText.startsWith("狗东") ||
+          sendText.startsWith("jd")
+        ) {
+          fetchStock("JD").then((res) => {
+            room.say(res);
+          });
+        } else if (
+          sendText.startsWith("英伟达") ||
+          sendText.startsWith("NVDA") ||
+          sendText.startsWith("NVD")
+        ) {
+          fetchStock("NVDA").then((res) => {
             room.say(res);
           });
         }

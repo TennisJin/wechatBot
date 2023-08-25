@@ -10,7 +10,6 @@ let randomUserAgent = uaTool.getRandomUserAgent();
  * @return {*}
  */
 const getPrice = (name = "hf_XAU", date = Date.now()) => {
-  console.log({ name });
   return new Promise((resolve, reject) => {
     axios
       .get(`https://hq.sinajs.cn/etag.php?_=${date}&list=${name}`, {
@@ -52,6 +51,38 @@ const getPrice = (name = "hf_XAU", date = Date.now()) => {
   });
 };
 
+// 获取对象最后一个属性值
+function getLastPropertyValue(obj) {
+  var keys = Object.keys(obj);
+  var lastKey = keys[keys.length - 1];
+  return obj[lastKey];
+}
+// 获取股票价格
+let fetchStock = (code = "JD") => {
+  return new Promise((resolve, reject) => {
+    fetch(
+      `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${code}&interval=1min&apikey=PV4UB93BAPQQVG4L`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        try {
+          const value = getLastPropertyValue(getLastPropertyValue(data))?.[
+            "4. close"
+          ];
+          console.log("价格:" + value);
+          resolve(value);
+        } catch {
+          reject(`获取${code}价格失败`);
+          console.error(`获取${code}价格失败`);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+        console.error(`获取${code}价格失败`, error);
+      });
+  });
+};
 module.exports = {
   getPrice,
+  fetchStock,
 };
