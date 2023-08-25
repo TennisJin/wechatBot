@@ -81,7 +81,7 @@ async function onMessage(botInstance, msg) {
 
   if (isText) {
     const text = msg.text();
-    console.log(contact, text);
+    console.log("内容:" + text);
     // if (text === "创建群聊") {
     //   // let contactTusi = await botInstance.bot.Contact.find({ name: "吐丝" });
     //   let contactA = await botInstance.bot.Contact.find({ name: "李嘉琪" });
@@ -92,7 +92,6 @@ async function onMessage(botInstance, msg) {
     //   await newRoom.say("欢迎加入新群聊！");
     // }
     if (room) {
-      console.log({ room });
       // 如果是群消息
       const topic = await room.topic();
       console.log(
@@ -138,9 +137,9 @@ async function onMessage(botInstance, msg) {
             room.say(res);
           });
         } else if (
-          sendText.startsWith("英伟达") ||
-          sendText.startsWith("NVDA") ||
-          sendText.startsWith("NVD")
+          sendText.startsWith("nvda") ||
+          sendText.startsWith("nvd") ||
+          sendText.startsWith("英伟达")
         ) {
           fetchStock("NVDA").then((res) => {
             room.say(res);
