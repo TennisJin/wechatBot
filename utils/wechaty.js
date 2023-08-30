@@ -122,7 +122,8 @@ async function onMessage(botInstance, msg) {
           return null;
         }
 
-        const code = getMatchingValue(sendText, Object.keys(keyWords));
+        const matchedValue = getMatchingValue(sendText, Object.keys(keyWords));
+        const code = keyWords[matchedValue];
         if (code) {
           if (["hf_XAU", "hf_CL"].includes(code)) {
             getPrice(code).then((res) => {
