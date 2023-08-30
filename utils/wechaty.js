@@ -9,6 +9,7 @@ const { rooms, people, keyWords } = require("../config");
 const completion = require("./openai");
 const { initChatGpt, conversation } = require("./chatgpt");
 let chatApi;
+const jinshiWebsocket = require("./jinshi");
 
 const workDayRemind = (botInstance) => {
   // 测试时间;
@@ -112,8 +113,18 @@ async function onMessage(botInstance, msg) {
       const mentionSelf = content.indexOf("@" + self.name()) !== -1;
       // 外汇逻辑
       if (topic == rooms.wajue) {
-        if (Object.keys(keyWords).includes(sendText)) {
-          const code = keyWords[sendText];
+        // 判断字符串a是否以数组b中的某一个值开头，是则返回b中命中的值
+        function getMatchingValue(a, b) {
+          for (var i = 0; i < b.length; i++) {
+            if (a.startsWith(b[i])) {
+              return b[i];
+            }
+          }
+          return null;
+        }
+
+        const code = getMatchingValue(sendText, Object.keys(keyWords));
+        if (code) {
           if (["hf_XAU", "hf_CL"].includes(code)) {
             getPrice(code).then((res) => {
               room.say(res);
@@ -248,6 +259,8 @@ global.wechatBot = wechatBot;
 initChatGpt().then((res) => {
   chatApi = res;
 });
+
+jinshiWebsocket.connect();
 
 module.exports = {
   wechatBot,
