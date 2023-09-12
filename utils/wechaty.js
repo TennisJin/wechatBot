@@ -3,7 +3,7 @@
  *  - https://github.com/gengchen528/wechatBot
  */
 const schedule = require("node-schedule");
-const { getPrice, fetchStock } = require("./index");
+const { getPrice, fetchStock, fetchExchangeUSDPrice } = require("./index");
 const { MyBot } = require("./bot");
 const { rooms, people, keyWords } = require("../config");
 const completion = require("./openai");
@@ -131,6 +131,10 @@ async function onMessage(botInstance, msg) {
             });
           } else if (["JD", "NVDA", "TSLA"].includes(code)) {
             fetchStock(code).then((res) => {
+              room.say(res);
+            });
+          } else if (["BTC", "ETH", "GBP", "EUR"].includes(code)) {
+            fetchExchangeUSDPrice(code).then((res) => {
               room.say(res);
             });
           }

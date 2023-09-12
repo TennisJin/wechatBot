@@ -30,5 +30,13 @@ module.exports = {
     特斯拉: "TSLA",
     tsla: "TSLA",
     tsl: "TSLA",
+    btc: "BTC",
+    比特币: "BTC",
+    eth: "ETH",
+    以太坊: "ETH",
+    英镑: "GBP",
+    gbp: "GBP",
+    eur: "EUR",
+    欧元: "EUR",
   },
 };

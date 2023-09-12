@@ -82,7 +82,35 @@ let fetchStock = (code = "JD") => {
       });
   });
 };
+
+// 获取股票价格
+let fetchExchangeUSDPrice = (code = "BTC") => {
+  return new Promise((resolve, reject) => {
+    fetch(
+      `https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${code}&to_currency=USD&apikey=PV4UB93BAPQQVG4L`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        try {
+          const realPrice =
+            data?.["Realtime Currency Exchange Rate"]?.["5. Exchange Rate"] ||
+            "出错咯";
+          console.log(realPrice);
+
+          resolve(realPrice);
+        } catch (error) {
+          reject(error);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+        console.error(`获取${code}价格失败`, error);
+      });
+  });
+};
+
 module.exports = {
   getPrice,
   fetchStock,
+  fetchExchangeUSDPrice,
 };
