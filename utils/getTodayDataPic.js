@@ -4,7 +4,7 @@ const path = require("path");
 
 const getTodayDataPic = async () => {
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     defaultViewport: {
       width: 1440,
       height: 800,
