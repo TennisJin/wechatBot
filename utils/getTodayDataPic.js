@@ -4,13 +4,14 @@ const path = require("path");
 
 const getTodayDataPic = async () => {
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
     defaultViewport: {
       width: 1440,
       height: 800,
     },
     //全屏 浏览器窗口最大化
-    args: ["--start-maximized", `--window-size=1440,900`],
+    // args: ["--start-maximized", `--window-size=1440,900`]
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
     // slowMo: 500,
   });
   const page = await browser.newPage();
@@ -46,12 +47,14 @@ const getTodayDataPic = async () => {
         path: `${path.join(path.resolve(__dirname), `/data/${name}`)}.png`,
       });
     }
+    await browser.close();
   };
 
   // screen(dataTable1, "dataTable1");
   // screen(dataTable2, "dataTable2");
   screen(dataMain, "dataMain");
 };
+getTodayDataPic();
 module.exports = {
   getTodayDataPic,
 };
