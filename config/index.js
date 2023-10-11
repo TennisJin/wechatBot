@@ -8,6 +8,9 @@ module.exports = {
       "@@82e8e3f30575b8b86893214bcb92b1a398f6f92c00a9a851359d6180fe9cad96",
     ceshiId:
       "@@2d00e6f811b0a912e31e03caf9b3c61f8cffbc4c22010149b6487cc6ea33a451",
+    exdaili: "交易测试群",
+    exdaili1: "ex沟通群",
+    exdaili2: "交易沟通群",
   },
   people: {
     ljqxh: "@e818f062a47364642958fab9f7e9f059",

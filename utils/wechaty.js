@@ -111,7 +111,11 @@ async function onMessage(botInstance, msg) {
       // const mentionSelf = await msg.mentionSelf();
       const mentionSelf = content.indexOf("@" + self.name()) !== -1;
       // 外汇逻辑
-      if (topic == rooms.wajue) {
+      if (
+        [rooms.wajue, rooms.exdaili, rooms.exdaili1, rooms.exdaili2].includes(
+          topic
+        )
+      ) {
         // 判断字符串a是否以数组b中的某一个值开头，是则返回b中命中的值
         function getMatchingValue(a, b) {
           for (var i = 0; i < b.length; i++) {
