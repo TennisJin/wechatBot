@@ -38,5 +38,8 @@ module.exports = {
     gbp: "GBP",
     eur: "EUR",
     欧元: "EUR",
+    数据: "DATA",
+    重要数据: "DATA",
+    重要: "DATA",
   },
 };

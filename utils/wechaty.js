@@ -8,8 +8,19 @@ const { MyBot } = require("./bot");
 const { rooms, people, keyWords } = require("../config");
 const completion = require("./openai");
 const { initChatGpt, conversation } = require("./chatgpt");
-let chatApi;
+const { getTodayDataPic } = require("./getTodayDataPic");
 
+// import { FileBox } from "file-box";
+// const FileBox = wechaty.FileBox;
+// console.log({ FileBox });
+const path = require("path");
+let chatApi, fileBoxHelper;
+
+(async () => {
+  const { FileBox } = await import("file-box");
+  console.log({ FileBox });
+  fileBoxHelper = FileBox;
+})();
 const workDayRemind = (botInstance) => {
   // 测试时间;
   // schedule.scheduleJob("00 * 9-22 * * 1-7", function () {
@@ -142,41 +153,25 @@ async function onMessage(botInstance, msg) {
             fetchExchangeUSDPrice(code).then((res) => {
               room.say(res);
             });
+          } else if (["DATA"].includes(code)) {
+            // 从本地图片数据创建
+            await getTodayDataPic();
+            setTimeout(() => {
+              // const imageFileBox1 = fileBoxHelper.fromFile(
+              //   path.join(path.resolve(__dirname), "./data/dataTable1.png")
+              // );
+              // const imageFileBox2 = fileBoxHelper.fromFile(
+              //   path.join(path.resolve(__dirname), "./data/dataTable2.png")
+              // );
+              const imageMain = fileBoxHelper.fromFile(
+                path.join(path.resolve(__dirname), "./data/dataMain.png")
+              );
+              // room.say(imageFileBox1);
+              // room.say(imageFileBox2);
+              room.say(imageMain);
+            }, 500);
           }
         }
-        // if (
-        //   sendText.startsWith("hj") ||
-        //   sendText.startsWith("黄金") ||
-        //   sendText.startsWith("gold")
-        // ) {
-        //   getPrice("hf_XAU").then((res) => {
-        //     room.say(res);
-        //   });
-        // } else if (
-        //   sendText.startsWith("oil") ||
-        //   sendText.startsWith("wti") ||
-        //   sendText.startsWith("油")
-        // ) {
-        //   getPrice("hf_CL").then((res) => {
-        //     room.say(res);
-        //   });
-        // } else if (
-        //   sendText.startsWith("京东") ||
-        //   sendText.startsWith("狗东") ||
-        //   sendText.startsWith("jd")
-        // ) {
-        //   fetchStock("JD").then((res) => {
-        //     room.say(res);
-        //   });
-        // } else if (
-        //   sendText.startsWith("nvda") ||
-        //   sendText.startsWith("nvd") ||
-        //   sendText.startsWith("英伟达")
-        // ) {
-        //   fetchStock("NVDA").then((res) => {
-        //     room.say(res);
-        //   });
-        // }
       }
       // 测试群聊
       if (room.id == rooms.ceshiId) {
