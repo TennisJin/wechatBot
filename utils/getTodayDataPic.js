@@ -1,9 +1,12 @@
 const puppeteer = require("puppeteer");
 const targetUrl = "https://rili.jin10.com/";
 const path = require("path");
+const fs = require("fs");
 
 const getTodayDataPic = async () => {
   console.log("getTodayDataPic", new Date());
+  // 删除之前的图片
+  fs.unlinkSync(`${path.join(path.resolve(__dirname), `/data/dataMain`)}.png`);
   const browser = await puppeteer.launch({
     headless: true,
     defaultViewport: {

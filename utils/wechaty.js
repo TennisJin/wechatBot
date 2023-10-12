@@ -170,6 +170,7 @@ async function onMessage(botInstance, msg) {
               const picMinute = picDate.getMinutes();
               const picSecond = picDate.getSeconds();
               // 不同的小时内
+              console.log({ picHour, picMinute, nowHour, nowMinute });
               if (picHour != nowHour) {
                 needNewPic = true;
               }
@@ -197,7 +198,7 @@ async function onMessage(botInstance, msg) {
               // room.say(imageFileBox1);
               // room.say(imageFileBox2);
               room.say(imageMain);
-            }, 500);
+            }, 200);
           }
         }
       }
