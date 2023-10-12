@@ -2,6 +2,7 @@ const puppeteer = require("puppeteer");
 const targetUrl = "https://rili.jin10.com/";
 const path = require("path");
 const fs = require("fs");
+const os = require("os");
 
 const TYPELIST = ["ALL", "CASE", "DATA"];
 /**
@@ -20,7 +21,7 @@ const getTodayImportantPic = async (type = "ALL") => {
     console.warn("图片删除失败");
   }
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: os.type() == "Linux",
     defaultViewport: {
       width: 1440,
       height: 800,
@@ -81,7 +82,7 @@ const getTodayImportantPic = async (type = "ALL") => {
   await processItems(TYPELIST);
   await browser.close();
 };
-// getTodayImportantPic();
+getTodayImportantPic();
 module.exports = {
   getTodayImportantPic,
 };
