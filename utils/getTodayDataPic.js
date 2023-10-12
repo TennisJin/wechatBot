@@ -6,7 +6,13 @@ const fs = require("fs");
 const getTodayDataPic = async () => {
   console.log("getTodayDataPic", new Date());
   // 删除之前的图片
-  fs.unlinkSync(`${path.join(path.resolve(__dirname), `/data/dataMain`)}.png`);
+  try {
+    fs.unlinkSync(
+      `${path.join(path.resolve(__dirname), `/data/dataMain`)}.png`
+    );
+  } catch {
+    console.warn("图片删除失败");
+  }
   const browser = await puppeteer.launch({
     headless: true,
     defaultViewport: {
