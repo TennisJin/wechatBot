@@ -13,7 +13,6 @@ const path = require("path");
 const fs = require("fs");
 
 let chatApi, fileBoxHelper;
-
 (async () => {
   const { FileBox } = await import("file-box");
   console.log({ FileBox });
@@ -167,7 +166,7 @@ async function onMessage(botInstance, msg) {
                 path.join(path.resolve(__dirname), "./data/dataMain.png")
               );
               const picDate = pic.birthtime;
-              const picHour = picData.getHours();
+              const picHour = picDate.getHours();
               const picMinute = picDate.getMinutes();
               const picSecond = picDate.getSeconds();
               // 不同的小时内
