@@ -48,7 +48,7 @@ const getTodayDataPic = async () => {
         path: `${path.join(path.resolve(__dirname), `/data/${name}`)}.png`,
       });
     }
-    await browser.close();
+    // await browser.close();
   };
 
   // screen(dataTable1, "dataTable1");
