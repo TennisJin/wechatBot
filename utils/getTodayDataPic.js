@@ -3,6 +3,7 @@ const targetUrl = "https://rili.jin10.com/";
 const path = require("path");
 
 const getTodayDataPic = async () => {
+  console.log("getTodayDataPic", new Date());
   const browser = await puppeteer.launch({
     headless: true,
     defaultViewport: {
