@@ -8,14 +8,13 @@ const { MyBot } = require("./bot");
 const { rooms, people, keyWords } = require("../config");
 const completion = require("./openai");
 const { initChatGpt, conversation } = require("./chatgpt");
-const { getTodayDataPic } = require("./getTodayDataPic");
+const { getTodayImportantPic } = require("./getTodayImportantPic");
 const path = require("path");
 const fs = require("fs");
 
 let chatApi, fileBoxHelper;
 (async () => {
   const { FileBox } = await import("file-box");
-  console.log({ FileBox });
   fileBoxHelper = FileBox;
 })();
 const workDayRemind = (botInstance) => {
@@ -150,25 +149,23 @@ async function onMessage(botInstance, msg) {
             fetchExchangeUSDPrice(code).then((res) => {
               room.say(res);
             });
-          } else if (["DATA"].includes(code)) {
+          } else if (["DATA", "CASE", "ALL"].includes(code)) {
             // 频率限制
             // 1、数据一般是00，15，30，45发布，所以非节点的时间15分钟之内不用重复截图
             // 获取当前时间和缓存的图片做对比
             const nowDate = new Date();
             const nowHour = nowDate.getHours();
             const nowMinute = nowDate.getMinutes();
-            const nowSecond = nowDate.getSeconds();
 
             // 需要获取新的图片
             let needNewPic = false;
             try {
               let pic = fs.statSync(
-                path.join(path.resolve(__dirname), "./data/dataMain.png")
+                path.join(path.resolve(__dirname), `./data/${code}.png`)
               );
               const picDate = pic.birthtime;
               const picHour = picDate.getHours();
               const picMinute = picDate.getMinutes();
-              const picSecond = picDate.getSeconds();
               // 不同的小时内
               console.log({ picHour, picMinute, nowHour, nowMinute });
               if (picHour != nowHour) {
@@ -184,21 +181,13 @@ async function onMessage(botInstance, msg) {
             }
 
             // 从本地图片数据创建
-            needNewPic && (await getTodayDataPic());
+            needNewPic && (await getTodayImportantPic(code));
             setTimeout(() => {
-              // const imageFileBox1 = fileBoxHelper.fromFile(
-              //   path.join(path.resolve(__dirname), "./data/dataTable1.png")
-              // );
-              // const imageFileBox2 = fileBoxHelper.fromFile(
-              //   path.join(path.resolve(__dirname), "./data/dataTable2.png")
-              // );
-              const imageMain = fileBoxHelper.fromFile(
-                path.join(path.resolve(__dirname), "./data/dataMain.png")
+              const image = fileBoxHelper.fromFile(
+                path.join(path.resolve(__dirname), `./data/${code}.png`)
               );
-              // room.say(imageFileBox1);
-              // room.say(imageFileBox2);
-              room.say(imageMain);
-            }, 200);
+              room.say(image);
+            }, 500);
           }
         }
       }

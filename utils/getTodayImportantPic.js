@@ -3,18 +3,24 @@ const targetUrl = "https://rili.jin10.com/";
 const path = require("path");
 const fs = require("fs");
 
-const getTodayDataPic = async () => {
-  console.log("getTodayDataPic", new Date());
+const TYPELIST = ["ALL", "CASE", "DATA"];
+/**
+ * @description: 获取今日重点
+ * @param {*} type DATA - 数据，CASE - 事件，ALL - 数据和事件
+ * @return {*}
+ */
+const getTodayImportantPic = async (type = "ALL") => {
+  console.log("getTodayImportantPic", new Date());
   // 删除之前的图片
   try {
-    fs.unlinkSync(
-      `${path.join(path.resolve(__dirname), `/data/dataMain`)}.png`
-    );
+    TYPELIST.forEach((e) => {
+      fs.unlinkSync(`${path.join(path.resolve(__dirname), `/data/${e}`)}.png`);
+    });
   } catch {
     console.warn("图片删除失败");
   }
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
     defaultViewport: {
       width: 1440,
       height: 800,
@@ -34,7 +40,7 @@ const getTodayDataPic = async () => {
   // 等待元素加载成功
   // await page.waitForTimeout(1000);
   // 更改标签中属性的值
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(500);
   const importantSelector =
     "#__layout > div > div.jin-layout-content.transition.top-tips-show > div > div.jin-layout-content__left > div > div.index-page-content > div > div > div > div:nth-child(1) > div.table-header__right > div > div:nth-child(1) > div";
   await page.$eval(importantSelector, (ele) => ele.click());
@@ -43,28 +49,39 @@ const getTodayDataPic = async () => {
   const dataSelector2 = "#jinTable2";
   const mainSelector =
     "#__layout > div > div.jin-layout-content.transition.top-tips-show > div > div.jin-layout-content__left > div > div.index-page-content > div > div > div";
-  const dataTable1 = await page.$(dataSelector1);
-  const dataTable2 = await page.$(dataSelector2);
-  const dataMain = await page.$(mainSelector);
-
-  const screen = async (dom, name = "") => {
-    if (dom) {
-      dom.screenshot({
-        path: `${path.join(path.resolve(__dirname), `/data/${name}`)}.png`,
-      });
-    } else {
-      page.screenshot({
-        path: `${path.join(path.resolve(__dirname), `/data/${name}`)}.png`,
-      });
-    }
-    // await browser.close();
+  const dataDom = await page.$(dataSelector1);
+  const caseDom = await page.$(dataSelector2);
+  const allDom = await page.$(mainSelector);
+  const domMap = {
+    DATA: dataDom,
+    CASE: caseDom,
+    ALL: allDom,
   };
 
-  // screen(dataTable1, "dataTable1");
-  // screen(dataTable2, "dataTable2");
-  screen(dataMain, "dataMain");
+  const screen = async (dom, type) => {
+    if (dom) {
+      await dom.screenshot({
+        path: `${path.join(path.resolve(__dirname), `/data/${type}`)}.png`,
+      });
+    } else {
+      await page.screenshot({
+        path: `${path.join(path.resolve(__dirname), `/data/${type}`)}.png`,
+      });
+    }
+  };
+  // 每一次都截取所有的图片
+  // for (const item of TYPELIST) {
+  //   await screen(domMap[item], item);
+  // }
+  const processItems = async (items) => {
+    for (const item of items) {
+      await screen(domMap[item], item);
+    }
+  };
+  await processItems(TYPELIST);
+  await browser.close();
 };
-getTodayDataPic();
+// getTodayImportantPic();
 module.exports = {
-  getTodayDataPic,
+  getTodayImportantPic,
 };
