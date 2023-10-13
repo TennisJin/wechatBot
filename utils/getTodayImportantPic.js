@@ -4,7 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const os = require("os");
 
-const TYPELIST = ["ALL", "CASE", "DATA"];
+const TYPELIST = ["CASE", "DATA", "ALL"];
 /**
  * @description: 获取今日重点
  * @param {*} type DATA - 数据，CASE - 事件，ALL - 数据和事件
@@ -39,13 +39,24 @@ const getTodayImportantPic = async (type = "ALL") => {
   // 地址栏输入网页地址
   await page.goto(targetUrl);
   // 等待元素加载成功
-  // await page.waitForTimeout(1000);
+  await page.waitForTimeout(200);
   // 更改标签中属性的值
-  await page.waitForTimeout(500);
   const importantSelector =
     "#__layout > div > div.jin-layout-content.transition.top-tips-show > div > div.jin-layout-content__left > div > div.index-page-content > div > div > div > div:nth-child(1) > div.table-header__right > div > div:nth-child(1) > div";
+  const waterMarkSelector =
+    "#__layout > div > div.jin-layout-content.transition.top-tips-show > div > div.jin-layout-content__left > div > div.index-page-content";
+  const switchContainerSelector =
+    "#__layout > div > div.jin-layout-content.transition.top-tips-show > div > div.jin-layout-content__left > div > div.index-page-content > div > div > div > div:nth-child(1) > div.table-header__right";
   await page.$eval(importantSelector, (ele) => ele.click());
-  await page.waitForTimeout(500);
+  // 隐藏switch区域
+  await page.$eval(
+    switchContainerSelector,
+    (ele) => (ele.style.display = "none")
+  );
+  // 隐藏水印
+  await page.$eval(waterMarkSelector, (ele) => {
+    ele.style.background = "aliceblue";
+  });
   const dataSelector1 = "#jinTable1";
   const dataSelector2 = "#jinTable2";
   const mainSelector =
@@ -58,6 +69,32 @@ const getTodayImportantPic = async (type = "ALL") => {
     CASE: caseDom,
     ALL: allDom,
   };
+  // 样式修改
+  await page.evaluate(() => {
+    document.querySelector(
+      "#jinTable1 > div.jin-table-header__wrapper > table > thead > tr > th:nth-child(8) > span"
+    ).style.display = "none";
+    document.querySelector(
+      "#jinTable1 > div.jin-table-header__wrapper > table > thead > tr > th:nth-child(9) > div"
+    ).style.display = "none";
+    document
+      .querySelectorAll(
+        "#jinTable1 > div.jin-table-body__wrapper > table > tbody > tr > td:nth-child(8)"
+      )
+      .forEach((e) => {
+        e.style.display = "none";
+      });
+    document
+      .querySelectorAll(
+        "#jinTable1 > div.jin-table-body__wrapper > table > tbody > tr > td:nth-child(9)"
+      )
+      .forEach((e) => {
+        e.style.display = "none";
+      });
+    document.querySelector(
+      "#jinTable1 > div.jin-table-body__wrapper > table > tbody > tr.countdown-line > td > div > span"
+    ).innerHTML = "下一条数据";
+  });
 
   const screen = async (dom, type) => {
     if (dom) {
@@ -71,12 +108,10 @@ const getTodayImportantPic = async (type = "ALL") => {
     }
   };
   // 每一次都截取所有的图片
-  // for (const item of TYPELIST) {
-  //   await screen(domMap[item], item);
-  // }
   const processItems = async (items) => {
     for (const item of items) {
       await screen(domMap[item], item);
+      await page.waitForTimeout(100);
     }
   };
   await processItems(TYPELIST);
