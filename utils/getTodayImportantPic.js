@@ -91,9 +91,10 @@ const getTodayImportantPic = async (type = "ALL") => {
       .forEach((e) => {
         e.style.display = "none";
       });
-    document.querySelector(
+    const nextData = document.querySelector(
       "#jinTable1 > div.jin-table-body__wrapper > table > tbody > tr.countdown-line > td > div > span"
-    ).innerHTML = "下一条数据";
+    );
+    nextData && (nextData.innerHTML = "下一条数据");
   });
 
   const screen = async (dom, type) => {
@@ -115,9 +116,11 @@ const getTodayImportantPic = async (type = "ALL") => {
     }
   };
   await processItems(TYPELIST);
-  await browser.close();
+  if (os.type() == "Linux") {
+    await browser.close();
+  }
 };
-getTodayImportantPic();
+// getTodayImportantPic();
 module.exports = {
   getTodayImportantPic,
 };
