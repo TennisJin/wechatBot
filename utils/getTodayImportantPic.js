@@ -55,7 +55,7 @@ const getTodayImportantPic = async (type = "ALL") => {
   );
   // 隐藏水印
   await page.$eval(waterMarkSelector, (ele) => {
-    ele.style.background = "aliceblue";
+    ele.style.background = "#fff";
   });
   const dataSelector1 = "#jinTable1";
   const dataSelector2 = "#jinTable2";
@@ -112,7 +112,7 @@ const getTodayImportantPic = async (type = "ALL") => {
   const processItems = async (items) => {
     for (const item of items) {
       await screen(domMap[item], item);
-      await page.waitForTimeout(100);
+      await page.waitForTimeout(200);
     }
   };
   await processItems(TYPELIST);
