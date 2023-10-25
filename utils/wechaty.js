@@ -42,18 +42,29 @@ const workDayRemind = (botInstance) => {
     └───────────────────────── second (0 - 59, OPTIONAL)
    */
   // 工作日8点到22点58分提示价格
-  schedule.scheduleJob("00 58 8-21 * * 1-5", function () {
-    getPrice("hf_XAU").then(async (res) => {
-      let contact = await botInstance.bot.Contact.find({
-        name: "吐丝",
+  schedule.scheduleJob("00 59 8-21 * * 1-5", function () {
+    // getPrice("hf_XAU").then(async (res) => {
+    //   // 所有符合规则的群都提醒
+    //   let contact = await botInstance.bot.Contact.find({
+    //     name: "吐丝",
+    //   });
+    //   botInstance.chatInRoom(rooms.wajue, res, contact);
+    // });
+    // getPrice("hf_CL").then(async (res) => {
+    //   let contact = await botInstance.bot.Contact.find({
+    //     name: "李嘉琪",
+    //   });
+    //   botInstance.chatInRoom(rooms.wajue, res, contact);
+    // });
+    let promises = [getPrice("hf_XAU"), getPrice("hf_CL")];
+    Promise.all(promises).then((res) => {
+      const hjPrice = res[0];
+      const oilPrice = res[1];
+      const remindWords = `黄金: ${hjPrice} \n 原油: ${oilPrice}`;
+      const roomList = [rooms.wajue, rooms.jiaoyi];
+      roomList.forEach((room) => {
+        botInstance.chatInRoom(rooms, remindWords);
       });
-      botInstance.chatInRoom(rooms.wajue, res, contact);
-    });
-    getPrice("hf_CL").then(async (res) => {
-      let contact = await botInstance.bot.Contact.find({
-        name: "李嘉琪",
-      });
-      botInstance.chatInRoom(rooms.wajue, res, contact);
     });
   });
 

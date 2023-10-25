@@ -3,6 +3,7 @@ module.exports = {
   // 群配置
   rooms: {
     wajue: "挖掘机",
+    jiaoyi: "~重生之我是交易者",
     ceshi: "测试群聊",
     wajueId:
       "@@82e8e3f30575b8b86893214bcb92b1a398f6f92c00a9a851359d6180fe9cad96",
