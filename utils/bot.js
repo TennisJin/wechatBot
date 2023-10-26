@@ -78,12 +78,19 @@ class MyBot {
     this.messageHook(this, msg);
   }
 
-  async chatInRoom(name = "测试群聊", message = "hello", metionContact = {}) {
+  async chatInRoom(
+    name = "测试群聊",
+    message = "hello",
+    metionContact = undefined
+  ) {
     try {
       console.log(name, message, metionContact);
       const room = await this.bot.Room.find({ topic: name });
-      room.say(message, metionContact);
-      // room.say(message);
+      if (metionContact) {
+        room.say(message, metionContact);
+      } else {
+        room.say(message);
+      }
     } catch (e) {
       console.log({ e });
     }
