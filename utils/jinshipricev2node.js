@@ -1,4 +1,5 @@
 /*! For license information please see index.js.LICENSE.txt */
+const WebSocket = require("ws");
 !(function (t, e) {
   "object" == typeof exports && "object" == typeof module
     ? (module.exports = e())
@@ -7,7 +8,7 @@
     : "object" == typeof exports
     ? (exports.Jin10Price = e())
     : (t.Jin10Price = e());
-})(global, function () {
+})(this, function () {
   return (() => {
     var t = {
         132: (t) => {
@@ -29,8 +30,8 @@
         },
         332: (t) => {
           (t.exports = function (t, e) {
-            // if (!(t instanceof e))
-            //   throw new TypeError("Cannot call a class as a function");
+            if (!(t instanceof e))
+              throw new TypeError("Cannot call a class as a function");
           }),
             (t.exports.__esModule = !0),
             (t.exports.default = t.exports);
@@ -141,7 +142,7 @@
           var n, i, o;
           "undefined" != typeof globalThis
             ? globalThis
-            : "undefined" != typeof global && global,
+            : "undefined" != typeof self && self,
             (i = [r(332), r(945), r(764)]),
             void 0 ===
               (o =
@@ -490,7 +491,7 @@
           var n, i, o;
           "undefined" != typeof globalThis
             ? globalThis
-            : "undefined" != typeof global && global,
+            : "undefined" != typeof self && self,
             (i = [r(764)]),
             (n = function (e) {
               "use strict";
@@ -640,7 +641,7 @@
           var n, i, o;
           "undefined" != typeof globalThis
             ? globalThis
-            : "undefined" != typeof global && global,
+            : "undefined" != typeof self && self,
             (i = [r(336), r(138), r(332), r(945), r(374)]),
             (n = function (e, n, i, o, u) {
               "use strict";
@@ -698,7 +699,7 @@
                   function t(e) {
                     (0, i.default)(this, t),
                       (e = e || {}),
-                      (this.isSupport = void 0 !== global.WebSocket),
+                      (this.isSupport = void 0 !== WebSocket),
                       (this.socket = null),
                       (this.priceConfig = {
                         code: (e.priceConfig || {}).code || [],
@@ -709,16 +710,15 @@
                         priceConfig: this.priceConfig,
                         otherCode: this.otherCode,
                       }),
-                      (this.callback = e.callback || new global.Function()),
+                      (this.callback = e.callback || function anonymous() {}),
                       (this.closeCallback =
-                        e.closeCallback || new global.Function()),
+                        e.closeCallback || function anonymous() {}),
                       (this.heartbeatTimer = null),
                       (this.isGetVolume = !1),
                       (this.reConnectCount = 0),
                       (this.connectTimeout = 500),
                       (this.failCount = 1),
-                      (this.historyDatas = []),
-                      this.inactiveAction();
+                      (this.historyDatas = []);
                   }
                   return (
                     (0, o.default)(
@@ -729,15 +729,16 @@
                           value: function () {
                             var t = this;
                             return (
-                              (this.socket = new global.WebSocket(
+                              (this.socket = new WebSocket(
                                 "wss://b-price.jin10.com/"
                               )),
-                              (global.priceSocket = this.socket),
+                              (globalThis.priceSocket = this.socket),
                               (this.socket.binaryType = "arraybuffer"),
                               new Promise(function (e, r) {
                                 t.socket.addEventListener("open", function (r) {
                                   console.log("connected"),
                                     t._sendHeartbeat(),
+                                    t.getPrice(),
                                     e();
                                 }),
                                   t.socket.addEventListener(
@@ -753,7 +754,7 @@
                                       console.log("close"),
                                         t.closeCallback(),
                                         (t.socket = null),
-                                        (global.priceSocket = null),
+                                        (globalThis.priceSocket = null),
                                         t.reconnect(),
                                         r(new Error("close"));
                                     }
@@ -855,18 +856,19 @@
                                       (r = {
                                         datas: JSON.parse(m),
                                       });
+                                  } else if (5003 === o) {
+                                    var I = i.readStringLE();
+                                    (u = "flash_plus"),
+                                      (r = {
+                                        datas: JSON.parse(I),
+                                      });
                                   }
-                                  global.postMessage(
-                                    {
-                                      event: "EXTERNAL_EVENTS_LISTEN",
-                                      data: {
-                                        type: u,
-                                        datas: r,
-                                      },
-                                    },
-                                    global.location.origin
-                                  ),
-                                    r && t.callback(r, u);
+                                  const data = {
+                                    type: u,
+                                    datas: r,
+                                  };
+                                  console.log({ data });
+                                  // r && t.callback(r, u);
                                 }
                               );
                           },
@@ -874,6 +876,7 @@
                         {
                           key: "switchCode",
                           value: function (t, e) {
+                            debugger;
                             if (
                               (void 0 !== e && (this.isGetVolume = e),
                               (t = Array.isArray(t) ? t : [t]),
@@ -970,91 +973,6 @@
                               var e = this.otherCode.indexOf(t);
                               e > -1 && this.otherCode.splice(e, 1);
                             }
-                          },
-                        },
-                        {
-                          key: "inactiveAction",
-                          value: function () {
-                            var t,
-                              e,
-                              r,
-                              n,
-                              i,
-                              o,
-                              u,
-                              s,
-                              f,
-                              h = this;
-                            document.addEventListener(
-                              "visibilitychange",
-                              function () {
-                                document.hidden
-                                  ? ((h.inactiveStore = {
-                                      priceConfig: a({}, h.priceConfig),
-                                      otherCode: h.otherCode,
-                                    }),
-                                    (h.otherCode = []),
-                                    (h.priceConfig.code = []),
-                                    h.switchOtherCode())
-                                  : ((h.priceConfig =
-                                      h.inactiveStore.priceConfig),
-                                    (h.otherCode = h.inactiveStore.otherCode),
-                                    h.switchOtherCode());
-                              }
-                            ),
-                              global.addEventListener(
-                                "resize",
-                                ((t = function () {
-                                  h.resizeFunc();
-                                }),
-                                (e = 500),
-                                (f = function f() {
-                                  var a = +new Date() - u;
-                                  a < e && a > 0
-                                    ? (n = setTimeout(f, e - a))
-                                    : ((n = null),
-                                      r ||
-                                        ((s = t.apply(o, i)),
-                                        n || (o = i = null)));
-                                }),
-                                function () {
-                                  for (
-                                    var i = arguments.length,
-                                      a = new Array(i),
-                                      h = 0;
-                                    h < i;
-                                    h++
-                                  )
-                                    a[h] = arguments[h];
-                                  (o = this), (u = +new Date());
-                                  var c = r && !n;
-                                  return (
-                                    n || (n = setTimeout(f, e)),
-                                    c && ((s = t.apply(o, a)), (o = a = null)),
-                                    s
-                                  );
-                                })
-                              );
-                          },
-                        },
-                        {
-                          key: "resizeFunc",
-                          value: function () {
-                            y &&
-                              (global.innerWidth <= 992
-                                ? this.priceConfig.code &&
-                                  this.priceConfig.code.length &&
-                                  ((this.inactiveStore = {
-                                    priceConfig: a({}, this.priceConfig),
-                                    otherCode: this.otherCode,
-                                  }),
-                                  (this.priceConfig.code = []),
-                                  this.switchOtherCode())
-                                : this.inactiveStore.priceConfig &&
-                                  this.inactiveStore.priceConfig.code.length &&
-                                  ((this.priceConfig =
-                                    this.inactiveStore.priceConfig),
-                                  this.switchOtherCode()));
                           },
                         },
                         {
@@ -1178,7 +1096,7 @@
                           value: function (t) {
                             if (
                               !this.socket ||
-                              this.socket.readyState !== global.WebSocket.OPEN
+                              this.socket.readyState !== WebSocket.OPEN
                             )
                               return !1;
                             this.socket.send(t);
@@ -1222,6 +1140,26 @@
                   );
                 })();
               t.exports = v;
+              // 连接websocket
+              let vInstant = new v();
+              vInstant.connect();
+              // 监听列表
+              const linstenList = [
+                "XAUUSD.GOODS",
+                "XAGUSD.GOODS",
+                "UKOIL.GOODS",
+                "USOIL.GOODS",
+                "DXY.NYF",
+                "EURUSD.NY$",
+                "ag888.SHF",
+                "NYMEXCL1.Volume",
+                "COMEXGC1.Volume",
+                "COMEXHG1.Volume",
+                "NYMEXNG1.Volume",
+              ];
+              setTimeout(() => {
+                vInstant.switchCode(linstenList, true);
+              }, 200);
             }),
             void 0 === (o = n.apply(e, i)) || (t.exports = o);
         },
@@ -2047,7 +1985,7 @@
             if (r + n > t.length) throw new RangeError("Index out of range");
             if (r < 0) throw new RangeError("Index out of range");
           }
-          function j(t, e, r, n, o) {
+          function N(t, e, r, n, o) {
             return (
               (e = +e),
               (r >>>= 0),
@@ -2056,7 +1994,7 @@
               r + 4
             );
           }
-          function N(t, e, r, n, o) {
+          function j(t, e, r, n, o) {
             return (
               (e = +e),
               (r >>>= 0),
@@ -2354,16 +2292,16 @@
               );
             }),
             (f.prototype.writeFloatLE = function (t, e, r) {
-              return j(this, t, e, !0, r);
-            }),
-            (f.prototype.writeFloatBE = function (t, e, r) {
-              return j(this, t, e, !1, r);
-            }),
-            (f.prototype.writeDoubleLE = function (t, e, r) {
               return N(this, t, e, !0, r);
             }),
-            (f.prototype.writeDoubleBE = function (t, e, r) {
+            (f.prototype.writeFloatBE = function (t, e, r) {
               return N(this, t, e, !1, r);
+            }),
+            (f.prototype.writeDoubleLE = function (t, e, r) {
+              return j(this, t, e, !0, r);
+            }),
+            (f.prototype.writeDoubleBE = function (t, e, r) {
+              return j(this, t, e, !1, r);
             }),
             (f.prototype.copy = function (t, e, r, n) {
               if (!f.isBuffer(t))
@@ -2721,6 +2659,7 @@
             value: !0,
           });
       }),
+      // 开始
       r(511)
     );
   })();
