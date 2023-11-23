@@ -33,8 +33,9 @@ const getTodayImportantPic = async (type = "ALL") => {
   });
   const page = await browser.newPage();
   await page.setViewport({
-    width: 1920,
-    height: 1080,
+    width: 1440,
+    height: 800,
+    deviceScaleFactor: 3,
   });
   // 地址栏输入网页地址
   await page.goto(targetUrl);
@@ -112,7 +113,7 @@ const getTodayImportantPic = async (type = "ALL") => {
   const processItems = async (items) => {
     for (const item of items) {
       await screen(domMap[item], item);
-      await page.waitForTimeout(200);
+      await page.waitForTimeout(500);
     }
   };
   await processItems(TYPELIST);
