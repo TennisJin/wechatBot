@@ -4,33 +4,109 @@ mongoose.connect("mongodb://127.0.0.1:27017/jinshi");
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", function () {
-  var kittySchema = mongoose.Schema({
-    name: String,
-  });
-
-  // var Kitten = mongoose.model("Kitten", kittySchema);
-  // var felyne = new Kitten({ name: "Felyne" });
-  // console.log(felyne.name); // 'Felyne'
-  kittySchema.methods.speak = function () {
-    var greeting = this.name
-      ? "Meow name is " + this.name
-      : "I don't have a name";
-    console.log(greeting);
-  };
-
-  var Kitten = mongoose.model("Kitten", kittySchema);
-  var fluffy = new Kitten({ name: "fluffy" });
-  fluffy.speak(); // "Meow name is fluffy"
-  fluffy.save(function (err, fluffy) {
-    if (err) return console.error(err);
-    fluffy.speak();
-  });
+  // findAllByCode("XAUUSD.GOODS");
 });
 
 const jinshiSchema = mongoose.Schema({
-  name: { type: "string", require: true },
-  content: String,
-  create_at: { type: Date, default: Date.now },
-  update_at: { type: Date, default: Date.now },
+  type: String, // 数据类型
+  code: String, // 价格类目
+  curPrice: Number, // 当前价格
+  hstClose: Number, // 收盘价格
+  time: Number, // 时间戳
+  date: { type: Date, default: Date.now },
 });
-const data = (module.exports = mongoose.model("jinshi", jinshiSchema));
+//数据模型模块
+const jinshiModel = mongoose.model("jinshi", jinshiSchema, "ws");
+
+// 查询所有数据
+const findAllByCode = (code) => {
+  const condition = {};
+  if (code) {
+    condition["code"] = code;
+  }
+  return new Promise((res, rej) => {
+    jinshiModel
+      .find(condition)
+      .then((templates) => {
+        res(templates);
+        console.log({ templates });
+        getDetailById(templates[0]._id);
+      })
+      .catch((err) => {
+        rej(err);
+      });
+  });
+};
+
+const addOrUpdate = (data = {}) => {
+  return new Promise((res, rej) => {
+    if (data.id) {
+      // 更新
+      jinshiModel
+        .findOneAndUpdate(
+          { _id: id },
+          {
+            $set: {
+              data: data,
+            },
+          },
+          {
+            new: true,
+          }
+        )
+        .then((templates) => {
+          res(templates);
+        })
+        .catch((err) => {
+          rej(err);
+        });
+    } else {
+      // 新增
+      jinshiModel.create(data, (err, template) => {
+        if (err) {
+          rej(err);
+        } else {
+          res(template);
+          console.log({ createTemplate: template });
+        }
+      });
+    }
+  });
+};
+
+const deleteById = (id) => {
+  return new Promise((res, rej) => {
+    jinshiModel
+      .findOne({
+        _id: id,
+      })
+      .then((templates) => {
+        res(templates);
+      })
+      .catch((err) => {
+        rej(err);
+      });
+  });
+};
+// 根据id获取详情
+const getDetailById = (id) => {
+  return new Promise((res, rej) => {
+    jinshiModel
+      .findOne({
+        _id: id,
+      })
+      .then((templates) => {
+        res(templates);
+      })
+      .catch((err) => {
+        rej(err);
+      });
+  });
+};
+
+module.exports = {
+  findAllByCode,
+  addOrUpdate,
+  deleteById,
+  getDetailById,
+};

@@ -1,3 +1,4 @@
+const { addOrUpdate } = require("./database");
 /*! For license information please see index.js.LICENSE.txt */
 !(function (t, e) {
   "object" == typeof exports && "object" == typeof module
@@ -884,6 +885,7 @@
                                   //   window.location.origin
                                   // ),
                                   console.log({ data });
+                                  addOrUpdate(data);
                                   // r && t.callback(r, u);
                                 }
                               );

@@ -1,5 +1,8 @@
 /*! For license information please see index.js.LICENSE.txt */
+
 const WebSocket = require("ws");
+const { addOrUpdate } = require("./database");
+
 !(function (t, e) {
   "object" == typeof exports && "object" == typeof module
     ? (module.exports = e())
@@ -867,7 +870,18 @@ const WebSocket = require("ws");
                                     type: u,
                                     datas: r,
                                   };
-                                  console.log({ data });
+                                  if (data.type === "price") {
+                                    const mongooseData = {
+                                      type: data.type,
+                                      code: data?.datas?.code, // 价格类目
+                                      curPrice: data?.datas?.curPrice, // 当前价格
+                                      hstClose: data?.datas?.hstClose, // 收盘价格
+                                      time: Date.parse(new Date()), // 时间戳
+                                    };
+                                    addOrUpdate(mongooseData).then(() => {
+                                      // findAll();
+                                    });
+                                  }
                                   // r && t.callback(r, u);
                                 }
                               );
