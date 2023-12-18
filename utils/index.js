@@ -95,10 +95,14 @@ let fetchExchangeUSDPrice = (code = "BTC") => {
           const realPrice =
             data?.["Realtime Currency Exchange Rate"]?.[
               "5. Exchange Rate"
-            ]?.toFixed("4") || "解析价格出错咯";
+            ]?.toFixed("4") || "";
           console.log(realPrice);
-
-          resolve(realPrice);
+          const fourDecimal = parseFloat(realPrice)?.toFixed(4);
+          if (fourDecimal !== "NaN") {
+            resolve(realPrice);
+          } else {
+            console.log("解析价格出错咯");
+          }
         } catch (error) {
           reject(error);
         }
