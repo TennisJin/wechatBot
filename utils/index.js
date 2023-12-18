@@ -93,8 +93,9 @@ let fetchExchangeUSDPrice = (code = "BTC") => {
       .then((data) => {
         try {
           const realPrice =
-            data?.["Realtime Currency Exchange Rate"]?.["5. Exchange Rate"] ||
-            "出错咯";
+            data?.["Realtime Currency Exchange Rate"]?.[
+              "5. Exchange Rate"
+            ]?.toFixed("4") || "解析价格出错咯";
           console.log(realPrice);
 
           resolve(realPrice);
