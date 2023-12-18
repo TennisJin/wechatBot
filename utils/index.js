@@ -93,9 +93,8 @@ let fetchExchangeUSDPrice = (code = "BTC") => {
       .then((data) => {
         try {
           const realPrice =
-            data?.["Realtime Currency Exchange Rate"]?.[
-              "5. Exchange Rate"
-            ]?.toFixed("4") || "";
+            data?.["Realtime Currency Exchange Rate"]?.["5. Exchange Rate"] ||
+            "";
           console.log(realPrice);
           const fourDecimal = parseFloat(realPrice)?.toFixed(4);
           if (fourDecimal !== "NaN") {
