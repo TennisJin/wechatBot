@@ -98,7 +98,7 @@ let fetchExchangeUSDPrice = (code = "BTC") => {
           console.log(realPrice);
           const fourDecimal = parseFloat(realPrice)?.toFixed(4);
           if (fourDecimal !== "NaN") {
-            resolve(realPrice);
+            resolve(fourDecimal);
           } else {
             console.log("解析价格出错咯");
           }
