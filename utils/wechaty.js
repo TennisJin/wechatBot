@@ -48,6 +48,13 @@ const workDayRemind = (botInstance) => {
     run();
   });
 
+  // 每15分钟更新数据图片
+
+  schedule.scheduleJob("*/15 * * * *", () => {
+    // 执行任务
+    getTodayImportantPic();
+  });
+
   // 测试
   // setTimeout(() => {
   //   getPrice("hf_XAU").then(async (res) => {
