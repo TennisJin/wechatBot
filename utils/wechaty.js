@@ -43,8 +43,8 @@ const workDayRemind = (botInstance) => {
     │    └──────────────────── minute (0 - 59)
     └───────────────────────── second (0 - 59, OPTIONAL)
    */
-  // 工作日8点到22点58分提示价格
-  schedule.scheduleJob("00 59 8-21 * * 1-5", function () {
+  // 工作日8点到17点58分提示价格
+  schedule.scheduleJob("00 59 8-17 * * 1-5", function () {
     run();
   });
 
