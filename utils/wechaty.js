@@ -140,9 +140,10 @@ async function onMessage(botInstance, msg) {
               room.say(res);
             });
           } else if (["JD", "NVDA", "TSLA"].includes(code)) {
-            fetchStock(code).then((res) => {
-              room.say(res);
-            });
+            room.say("不聊股票哦");
+            // fetchStock(code).then((res) => {
+            //   room.say(res);
+            // });
           } else if (["BTC", "ETH", "GBP", "EUR"].includes(code)) {
             fetchExchangeUSDPrice(code).then((res) => {
               room.say(res);
