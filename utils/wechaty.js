@@ -139,7 +139,7 @@ async function onMessage(botInstance, msg) {
             getPrice(code).then((res) => {
               room.say(res);
             });
-          } else if (["JD", "NVDA", "TSLA"].includes(code)) {
+          } else if (["JD", "NVDA", "TSLA", "HK"].includes(code)) {
             room.say("不聊股票哦");
             // fetchStock(code).then((res) => {
             //   room.say(res);

@@ -31,6 +31,8 @@ module.exports = {
     特斯拉: "TSLA",
     tsla: "TSLA",
     tsl: "TSLA",
+    hk: "HK",
+    HK: "HK",
     btc: "BTC",
     比特币: "BTC",
     eth: "ETH",
