@@ -33,6 +33,8 @@ module.exports = {
     tsl: "TSLA",
     hk: "HK",
     HK: "HK",
+    fil: "FIL",
+    FIL: "FIL",
     btc: "BTC",
     比特币: "BTC",
     eth: "ETH",
