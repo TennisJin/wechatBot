@@ -52,7 +52,11 @@ const workDayRemind = (botInstance) => {
 
   schedule.scheduleJob("*/15 * * * *", () => {
     // 执行任务
-    getTodayImportantPic();
+    try {
+      getTodayImportantPic();
+    } catch (e) {
+      console.error({ e });
+    }
   });
 
   // 测试
