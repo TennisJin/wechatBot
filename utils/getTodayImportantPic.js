@@ -15,7 +15,11 @@ const getTodayImportantPic = async (type = "ALL") => {
   // 删除之前的图片
   try {
     TYPELIST.forEach((e) => {
-      fs.unlinkSync(`${path.join(path.resolve(__dirname), `/data/${e}`)}.png`);
+      const filePath = path.join(path.resolve(__dirname), `/data/${e}`);
+      if (fs.existsSync(filePath)) {
+        // 文件存在
+        fs.unlinkSync(`${filePath}.png`);
+      }
     });
   } catch {
     console.warn("图片删除失败");
