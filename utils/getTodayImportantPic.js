@@ -75,32 +75,32 @@ const getTodayImportantPic = async (type = "ALL") => {
     ALL: allDom,
   };
   // 样式修改
-  await page.evaluate(() => {
-    document.querySelector(
-      "#jinTable1 > div.jin-table-header__wrapper > table > thead > tr > th:nth-child(8) > span"
-    ).style.display = "none";
-    document.querySelector(
-      "#jinTable1 > div.jin-table-header__wrapper > table > thead > tr > th:nth-child(9) > div"
-    ).style.display = "none";
-    document
-      .querySelectorAll(
-        "#jinTable1 > div.jin-table-body__wrapper > table > tbody > tr > td:nth-child(8)"
-      )
-      .forEach((e) => {
-        e.style.display = "none";
-      });
-    document
-      .querySelectorAll(
-        "#jinTable1 > div.jin-table-body__wrapper > table > tbody > tr > td:nth-child(9)"
-      )
-      .forEach((e) => {
-        e.style.display = "none";
-      });
-    const nextData = document.querySelector(
-      "#jinTable1 > div.jin-table-body__wrapper > table > tbody > tr.countdown-line > td > div > span"
-    );
-    nextData && (nextData.innerHTML = "下一条数据");
-  });
+  // await page.evaluate(() => {
+  //   document.querySelector(
+  //     "#jinTable1 > div.jin-table-header__wrapper > table > thead > tr > th:nth-child(8) > span"
+  //   ).style.display = "none";
+  //   document.querySelector(
+  //     "#jinTable1 > div.jin-table-header__wrapper > table > thead > tr > th:nth-child(9) > div"
+  //   ).style.display = "none";
+  //   document
+  //     .querySelectorAll(
+  //       "#jinTable1 > div.jin-table-body__wrapper > table > tbody > tr > td:nth-child(8)"
+  //     )
+  //     .forEach((e) => {
+  //       e.style.display = "none";
+  //     });
+  //   document
+  //     .querySelectorAll(
+  //       "#jinTable1 > div.jin-table-body__wrapper > table > tbody > tr > td:nth-child(9)"
+  //     )
+  //     .forEach((e) => {
+  //       e.style.display = "none";
+  //     });
+  //   const nextData = document.querySelector(
+  //     "#jinTable1 > div.jin-table-body__wrapper > table > tbody > tr.countdown-line > td > div > span"
+  //   );
+  //   nextData && (nextData.innerHTML = "下一条数据");
+  // });
 
   const screen = async (dom, type) => {
     if (dom) {
