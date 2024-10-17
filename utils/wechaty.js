@@ -124,7 +124,8 @@ async function onMessage(botInstance, msg) {
         topic == rooms.wajue ||
         topic.startsWith("~") ||
         topic.startsWith("*") ||
-        topic.startsWith("⭐️")
+        topic.startsWith("⭐️") ||
+        topic.indexOf("出金") != -1
       ) {
         // 判断字符串a是否以数组b中的某一个值开头，是则返回b中命中的值
         function getMatchingValue(a, b) {
